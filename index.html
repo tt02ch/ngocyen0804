@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOI Thé 20/10 - Con Bòaa Ýn Zuiii 🐮🧋🩵</title>
+    <title>Con Bòaa Ýn 🩵</title>
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧋</text></svg>">
     
@@ -210,7 +210,7 @@
         }
 
         /* ==========================================================================
-           2. VÒNG XOAY 3D GALAXY ORBIT CAROUSEL (HIỆU ỨNG 3D XOAY THỰC)
+           2. VÒNG XOAY 3D GALAXY ORBIT CAROUSEL
            ========================================================================== */
         .orbit-container {
             position: relative;
@@ -251,20 +251,8 @@
 
         .orbit-card img {
             width: 100%;
-            height: 80%;
+            height: 100%;
             object-fit: cover;
-        }
-
-        .orbit-card .card-cap {
-            height: 20%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-light);
-            background: rgba(8, 12, 20, 0.95);
-            padding: 0 6px;
         }
 
         .orbit-controls {
@@ -399,7 +387,7 @@
 
         .lightbox-img {
             max-width: 90%;
-            max-height: 70vh;
+            max-height: 75vh;
             border-radius: 16px;
             border: 2px solid var(--glacier-cyan);
             box-shadow: 0 0 30px var(--glacier-glow);
@@ -423,6 +411,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Trình phát nhạc Youtube ẩn -->
+    <div id="ytAudioPlayer" style="display: none;"></div>
 
     <!-- Canvas Vũ Trụ Galaxy & Trân Châu Hoàng Kim Floating -->
     <canvas id="effectsCanvas"></canvas>
@@ -511,7 +502,6 @@
     <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
         <div style="text-align: center; max-width: 600px;">
             <img src="" id="lightboxImg" class="lightbox-img">
-            <p id="lightboxCap" style="color: var(--koi-gold); font-family: var(--font-title); font-size: 1.1rem; margin-top: 15px;"></p>
         </div>
     </div>
 
@@ -522,32 +512,75 @@
     <script>
         /* ===================================================
            1. CẤU HÌNH DỄ DÀNG THAY ẢNH CỦA NGỌC YẾN
+           (Các file ảnh nằm cùng cấp với file index.html)
            =================================================== */
         const CONFIG_IMAGES = [
-            {
-                url: "1.png",
-                
-            },
-            {
-                url: "2.png",
-                
-            },
-            {
-                url: "3.png",
-                
-            },
-            {
-                url: "4.png",
-                
-            },
-            {
-                url: "5.png",
-               
-            }
+            { url: "1.png" },
+            { url: "2.png" },
+            { url: "3.png" },
+            { url: "4.png" },
+            { url: "5.png" }
         ];
 
         /* ===================================================
-           2. CANVAS EFFECTS: STARS & FLOATING BOBA / KOI CUPS
+           2. CẤU HÌNH NHẠC YOUTUBE HOT TREND (LAVIEM / TỰ THAY LINK)
+           =================================================== */
+        // ID Video Youtube bài nhạc Laviem / Hot Trend
+        const YOUTUBE_VIDEO_ID = "1g20T3yD-kM"; // <- Thay đổi ID video Youtube tại đây nếu muốn
+
+        let ytPlayer = null;
+        let isAudioPlaying = false;
+
+        // Tải API iframe của Youtube
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('ytAudioPlayer', {
+                height: '0',
+                width: '0',
+                videoId: YOUTUBE_VIDEO_ID,
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': YOUTUBE_VIDEO_ID
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.setVolume(100);
+        }
+
+        function startAudio() {
+            if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                ytPlayer.playVideo();
+                isAudioPlaying = true;
+                document.getElementById('audioBtn').innerText = '🔊';
+            }
+        }
+
+        function stopAudio() {
+            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+                ytPlayer.pauseVideo();
+                isAudioPlaying = false;
+                document.getElementById('audioBtn').innerText = '🔇';
+            }
+        }
+
+        document.getElementById('audioBtn').addEventListener('click', () => {
+            if (isAudioPlaying) stopAudio();
+            else startAudio();
+        });
+
+        /* ===================================================
+           3. CANVAS EFFECTS: STARS & FLOATING BOBA
            =================================================== */
         const canvas = document.getElementById('effectsCanvas');
         const ctx = canvas.getContext('2d');
@@ -558,13 +591,12 @@
             canvas.height = window.innerHeight;
             particles = [];
 
-            // Tạo các ngôi sao Galaxy & Hạt Trân Châu Hoàng Kim floating
             for (let i = 0; i < 90; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     radius: Math.random() * 3 + 1,
-                    color: Math.random() > 0.4 ? '#ffb703' : '#70d6ff', // Vàng KOI hoặc Xanh Glacier
+                    color: Math.random() > 0.4 ? '#ffb703' : '#70d6ff',
                     speedY: Math.random() * 0.6 + 0.2,
                     speedX: Math.sin(Math.random()) * 0.3,
                     isBoba: Math.random() > 0.6
@@ -594,7 +626,7 @@
         }
 
         /* ===================================================
-           3. 3D ORBIT CAROUSEL LOGIC
+           4. 3D ORBIT CAROUSEL LOGIC
            =================================================== */
         let currentAngle = 0;
         let isAutoRotating = true;
@@ -605,18 +637,18 @@
             stage.innerHTML = '';
             const total = CONFIG_IMAGES.length;
             const angleStep = 360 / total;
-            const radius = window.innerWidth < 600 ? 160 : 230; // Dynamic Radius for Mobile/PC
+            const radius = window.innerWidth < 600 ? 160 : 230;
 
             CONFIG_IMAGES.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'orbit-card';
+                card.style.height = '100%';
                 const angle = angleStep * index;
                 card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-                card.onclick = () => openLightbox(item.url, item.caption);
+                card.onclick = () => openLightbox(item.url);
 
                 card.innerHTML = `
                     <img src="${item.url}" alt="Ýn" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'">
-                    <div class="card-cap">${item.caption}</div>
                 `;
                 stage.appendChild(card);
             });
@@ -629,7 +661,7 @@
         }
 
         function rotateManual(direction) {
-            currentAngle += direction * 72; // Move 1 step
+            currentAngle += direction * 72;
             updateOrbitTransform();
         }
 
@@ -637,7 +669,7 @@
             if (autoRotateTimer) clearInterval(autoRotateTimer);
             autoRotateTimer = setInterval(() => {
                 if (isAutoRotating) {
-                    currentAngle -= 0.6; // Smooth continuous rotation
+                    currentAngle -= 0.6;
                     updateOrbitTransform();
                 }
             }, 30);
@@ -649,12 +681,12 @@
         }
 
         /* ===================================================
-           4. INTERACTION HANDLERS & CONFETTI
+           5. INTERACTION HANDLERS & CONFETTI
            =================================================== */
         function openGift() {
             document.getElementById('intro-screen').classList.add('hidden');
             triggerConfetti();
-            startMelody();
+            startAudio();
         }
 
         function triggerConfetti() {
@@ -677,69 +709,14 @@
             document.getElementById('vipModal').classList.remove('active');
         }
 
-        function openLightbox(url, cap) {
+        function openLightbox(url) {
             document.getElementById('lightboxImg').src = url;
-            document.getElementById('lightboxCap').innerText = cap;
             document.getElementById('lightboxModal').classList.add('active');
         }
 
         function closeLightbox() {
             document.getElementById('lightboxModal').classList.remove('active');
         }
-
-        /* ===================================================
-           5. AUDIO SYNTHESIZER (NO EXTERNAL MP3 NEEDED)
-           =================================================== */
-        let audioCtx = null;
-        let isAudioPlaying = false;
-        let melodyLoop = null;
-
-        const melodyNotes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00];
-
-        function playSynthNote(freq) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.0);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 1.0);
-            } catch (e) {}
-        }
-
-        function startMelody() {
-            if (isAudioPlaying) return;
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            isAudioPlaying = true;
-            document.getElementById('audioBtn').innerText = '🔊';
-
-            let idx = 0;
-            melodyLoop = setInterval(() => {
-                playSynthNote(melodyNotes[idx % melodyNotes.length]);
-                idx++;
-            }, 550);
-        }
-
-        function stopMelody() {
-            isAudioPlaying = false;
-            clearInterval(melodyLoop);
-            document.getElementById('audioBtn').innerText = '🔇';
-        }
-
-        document.getElementById('audioBtn').addEventListener('click', () => {
-            if (isAudioPlaying) stopMelody();
-            else startMelody();
-        });
 
         /* ===================================================
            6. INITIALIZATION
