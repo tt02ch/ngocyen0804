@@ -412,10 +412,16 @@
 </head>
 <body>
 
+    <!-- Thẻ Audio Ẩn Để Phát File Nhạc Tải Lên -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="yn.mp4" type="audio/mpeg">
+        <!-- Có thể hỗ trợ thêm định dạng khác như .ogg / .wav nếu cần -->
+    </audio>
+
     <!-- Canvas Vũ Trụ Galaxy & Trân Châu Hoàng Kim Floating -->
     <canvas id="effectsCanvas"></canvas>
 
-    <!-- Nút Âm Thanh Background -->
+    <!-- Nút Bật/Tắt Âm Thanh -->
     <button class="audio-btn" id="audioBtn" title="Bật/Tắt Nhạc Nền">🎵</button>
 
     <!-- 1. INTRO SCREEN -->
@@ -448,11 +454,6 @@
                     <!-- Cards generated dynamically via JavaScript -->
                 </div>
             </div>
-            <!-- <div class="orbit-controls">
-                <button class="btn-ctrl" onclick="rotateManual(-1)">❮</button>
-                <button class="btn-ctrl" onclick="toggleAutoRotate()" id="pauseBtn">⏸</button>
-                <button class="btn-ctrl" onclick="rotateManual(1)">❯</button>
-            </div> -->
         </div>
 
         <!-- 3. INTERACTIVE KOI THÉ VOUCHER -->
@@ -519,68 +520,35 @@
         ];
 
         /* ===================================================
-           2. NATIVE WEB AUDIO SYNTHESIZER (PHÁT NHẠC TỰ ĐỘNG CỰC TỐT)
+           2. LOGIC PHÁT FILE ÂM THANH TẢI LÊN (AUDIO FILE)
            =================================================== */
-        let audioCtx = null;
+        const bgAudio = document.getElementById('bgMusic');
         let isAudioPlaying = false;
-        let melodyLoop = null;
-
-        // Giai điệu nhẹ nhàng, trong trẻo dễ thương
-        const melodyNotes = [
-            261.63, 329.63, 392.00, 523.25, 
-            440.00, 349.23, 392.00, 523.25,
-            587.33, 523.25, 440.00, 392.00
-        ];
-
-        function playSynthNote(freq) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'sine'; // Tần số sóng tròn mềm mại
-                osc.frequency.value = freq;
-                
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start();
-                osc.stop(audioCtx.currentTime + 1.2);
-            } catch (e) {}
-        }
 
         function startAudio() {
-            if (isAudioPlaying) return;
+            if (!bgAudio) return;
             
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            
-            isAudioPlaying = true;
-            document.getElementById('audioBtn').innerText = '🔊';
-
-            let idx = 0;
-            melodyLoop = setInterval(() => {
-                playSynthNote(melodyNotes[idx % melodyNotes.length]);
-                idx++;
-            }, 450);
+            bgAudio.play().then(() => {
+                isAudioPlaying = true;
+                document.getElementById('audioBtn').innerText = '🔊';
+            }).catch(err => {
+                console.log("Autoplay blocked or file not found:", err);
+            });
         }
 
         function stopAudio() {
+            if (!bgAudio) return;
+            bgAudio.pause();
             isAudioPlaying = false;
-            if (melodyLoop) clearInterval(melodyLoop);
             document.getElementById('audioBtn').innerText = '🔇';
         }
 
         document.getElementById('audioBtn').addEventListener('click', () => {
-            if (isAudioPlaying) stopAudio();
-            else startAudio();
+            if (isAudioPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
         });
 
         /* ===================================================
@@ -664,11 +632,6 @@
             stage.style.transform = `rotateY(${currentAngle}deg)`;
         }
 
-        function rotateManual(direction) {
-            currentAngle += direction * 72;
-            updateOrbitTransform();
-        }
-
         function startAutoRotate() {
             if (autoRotateTimer) clearInterval(autoRotateTimer);
             autoRotateTimer = setInterval(() => {
@@ -679,18 +642,13 @@
             }, 30);
         }
 
-        function toggleAutoRotate() {
-            isAutoRotating = !isAutoRotating;
-            document.getElementById('pauseBtn').innerText = isAutoRotating ? '⏸' : '▶';
-        }
-
         /* ===================================================
            5. INTERACTION HANDLERS & CONFETTI
            =================================================== */
         function openGift() {
             document.getElementById('intro-screen').classList.add('hidden');
             triggerConfetti();
-            startAudio();
+            startAudio(); // Phát file nhạc tải lên khi mở thư
         }
 
         function triggerConfetti() {
