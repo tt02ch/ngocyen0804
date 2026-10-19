@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng 20/10 - Ngọc Yến 🐮🩵</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Dancing+Script:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            /* Glacier Blue Theme - iPhone 18 Pro Max Style */
+            --glacier-primary: #5c93b3;
+            --glacier-light: #d6e8f2;
+            --glacier-bg: #edf5f9;
+            --glacier-card: #ffffff;
+            --text-main: #2b3a42;
+            --cow-black: #3a322d;
+            --accent-glow: rgba(92, 147, 179, 0.25);
+            --border-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive, sans-serif;
+            background-color: var(--glacier-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient Floating Cow Paws Background */
+        .bg-floating-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-item {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.35;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Layout Structure */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Intro Screen - Full Overlay */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #d8ebf5 0%, #b3d4e8 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+        }
+
+        #intro-screen.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gift-box-wrapper {
+            position: relative;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .gift-box-wrapper:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .gift-emoji {
+            font-size: 5rem;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+            animation: pulseGift 1.8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseGift {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15) rotate(-3deg); }
+        }
+
+        .intro-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #244152;
+            margin-bottom: 10px;
+        }
+
+        .intro-sub {
+            font-size: 1.1rem;
+            color: #4a6c7e;
+            margin-bottom: 25px;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--glacier-primary), #417595);
+            color: #fff;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(92, 147, 179, 0.4);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(92, 147, 179, 0.6);
+        }
+
+        .btn-main:active {
+            transform: translateY(1px);
+        }
+
+        /* Audio Toggle Button */
+        .audio-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--glacier-light);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: #ffffff;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #244152;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 4px;
+            background: var(--glacier-primary);
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Card Container */
+        .card-box {
+            background: var(--glacier-card);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 2px solid var(--glacier-light);
+            margin-bottom: 40px;
+        }
+
+        /* Wish Section */
+        .wish-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #384e5a;
+        }
+
+        .wish-content p {
+            margin-bottom: 15px;
+        }
+
+        .highlight-nickname {
+            color: var(--glacier-primary);
+            font-weight: 700;
+            background: var(--glacier-light);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        /* Gallery Scrapbook Polaroid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .polaroid-card {
+            background: #ffffff;
+            padding: 12px 12px 20px 12px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border: 1px solid #e1ebf0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .polaroid-card:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+        .polaroid-card:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid-card:hover {
+            transform: translateY(-8px) scale(1.02) rotate(0deg);
+            box-shadow: 0 15px 30px rgba(92, 147, 179, 0.25);
+            z-index: 2;
+        }
+
+        .polaroid-img-wrapper {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--glacier-bg);
+            position: relative;
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .polaroid-card:hover .polaroid-img {
+            transform: scale(1.08);
+        }
+
+        .polaroid-caption {
+            margin-top: 12px;
+            text-align: center;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.15rem;
+            color: #334a56;
+        }
+
+        .tape-sticker {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 20px;
+            background: rgba(214, 232, 242, 0.8);
+            border: 1px dashed #b5d2e2;
+            z-index: 3;
+        }
+
+        /* Funny Cards Grid */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .note-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f4f9fc 100%);
+            border-left: 5px solid var(--glacier-primary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .note-card .cow-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Surprise Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(36, 65, 82, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 100%;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            border: 3px solid var(--glacier-light);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--glacier-bg);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* Lightbox for Images */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 75vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            color: #ffffff;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #6a8595;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .intro-title { font-size: 1.7rem; }
+            .section-title { font-size: 1.4rem; }
+            section { padding: 40px 15px; }
+            .card-box { padding: 20px; }
+            .gift-emoji { font-size: 4rem; }
+            .btn-main { padding: 12px 28px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Floating Elements -->
+    <div class="bg-floating-container" id="floatingBg"></div>
+
+    <!-- Audio Toggle Button -->
+    <button class="audio-btn" id="audioToggle" title="Bật/Tắt Nhạc Nền">🎵</button>
+
+    <!-- 1. INTRO SCREEN -->
+    <div id="intro-screen">
+        <div class="gift-box-wrapper" onclick="openGift()">
+            <div class="gift-emoji">🐮🩵🎁</div>
+        </div>
+        <h1 class="intro-title">Ê CON BÒAAA ÝN ƠIIII!</h1>
+        <p class="intro-sub">Có một món quà siêu Băng Thanh Glacier 18 Pro Max dành riêng cho bà 20/10 nè! ✨</p>
+        <button class="btn-main" onclick="openGift()">Mở quà đi bà ơiii 🎁</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- 2. LỜI CHÚC CÁ NHÂN HÓA -->
+        <section id="wishes">
+            <h2 class="section-title">Gửi Bòaa Ýn "Zuiii" 🐮🩵</h2>
+            <div class="card-box">
+                <div class="wish-content">
+                    <p>Chúc mừng ngày Phụ nữ Việt Nam 20/10 <span class="highlight-nickname">con bòaa Ýn</span> thân mến! 🎉</p>
+                    <p>Chúc bà ngày 20/10 luôn tràn ngập niềm vui, lúc nào cũng tươi xắn, xinh đẹp rạng rỡ và nhận được thật nhiều quà (đặc biệt là đồ ăn ngon nhé 🍕🧋).</p>
+                    <p>Mặc dù bình thường hay trêu bà là <span class="highlight-nickname">con bòaa Ýn</span> vừa lầy vừa "zuiii", nhưng phải công nhận là nhờ có năng lượng tích cực của bà mà lúc nào nhóm mình cũng ngập tràn tiếng cười.</p>
+                    <p>Mong rằng tuổi mới / ngày mới bà luôn giữ vững sự yêu đời, công việc thuận lợi, học hành bứt phá và sớm đạt được mọi mục tiêu đề ra nha! 💪🩵</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ALBUM ẢNH POLAROID SCRAPBOOK -->
+        <section id="gallery">
+            <h2 class="section-title">Khoảnh Khắc Của Ýn 📸</h2>
+            <p style="text-align: center; color: #5a788a; margin-bottom: 20px; font-size: 0.95rem;">(Bấm vào từng tấm ảnh để xem phiên bản xịn xò nhé! ✨)</p>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Grid items generated dynamically by JavaScript -->
+            </div>
+        </section>
+
+        <!-- 4. NHỮNG LỜI NHẮN ĐÁNG YÊU -->
+        <section id="notes">
+            <h2 class="section-title">Ghi Chú Độc Quyền 📝</h2>
+            <div class="notes-grid">
+                <div class="note-card">
+                    <span class="cow-icon">🌱🐮</span>
+                    <p><strong>Chúc bòaa Ýn</strong> lúc nào cũng vui vẻ như được tung tăng ăn cỏ tươi ngon giữa đồng cỏ Băng Thanh!</p>
+                </div>
+                <div class="note-card">
+                    <span class="cow-icon">👑🐮</span>
+                    <p><strong>Đặc quyền 20/10:</strong> Hôm nay được làm công chúa sang chảnh, còn ngày thường quay về làm bò xì-tin cũng okela nha!</p>
+                </div>
+                <div class="note-card">
+                    <span class="cow-icon">✨😆</span>
+                    <p>Mãi giữ nụ cười <strong>"zuiii"</strong> rạng rỡ và năng lượng tích cực này nhé, đừng để ai làm dập tắt sự đáng yêu đó!</p>
+                </div>
+                <div class="note-card">
+                    <span class="cow-icon">🧋🍰</span>
+                    <p>Chúc Ýn ăn hoài không béo, uống trà sữa không tăng cân và lúc nào cũng có người sẵn sàng bao ăn!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. KẾT THÚC BẤT NGỜ -->
+        <section id="surprise" style="text-align: center;">
+            <div class="card-box" style="background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);">
+                <h3 style="font-size: 1.4rem; color: #244152; margin-bottom: 15px;">Vẫn Còn Một Điều Bất Ngờ Cuối Cùng! 🎁</h3>
+                <p style="color: #4a6c7e; margin-bottom: 20px;">Bấm vào bên dưới để nhận tấm thiệp bí mật dành riêng cho bà nhé.</p>
+                <button class="btn-main" onclick="showSurpriseModal()">Nhận lời chúc cuối cùng 💌</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- SURPRISE MODAL -->
+    <div class="modal-overlay" id="surpriseModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSurpriseModal()">✕</button>
+            <div style="font-size: 3.5rem; margin-bottom: 10px;">💌🐮🩵</div>
+            <h3 style="font-size: 1.6rem; color: #244152; margin-bottom: 15px;">Thư Gửi Ngọc Yến</h3>
+            <p style="color: #384e5a; font-size: 1.05rem; line-height: 1.7; margin-bottom: 20px;">
+                Cảm ơn bà vì đã luôn là một người bạn tuyệt vời, mang lại muôn vàn niềm vui và tiếng cười "zuiii"! Trang web chuẩn phong cách xanh **Glacier iPhone 18 Pro Max** này được thiết kế riêng cho bà với tất cả sự trân trọng.<br><br>
+                Chúc Ngọc Yến ngày 20/10 thật hạnh phúc và tràn ngập niềm vui! 🐮✨
+            </p>
+            <button class="btn-main" onclick="closeSurpriseModal()" style="padding: 10px 25px; font-size: 0.95rem;">Yêu thương luôn! 💕</button>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX MODAL -->
+    <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+        <img src="" alt="Zoomed Image" class="lightbox-img" id="lightboxImg">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <footer>
+        <p>Created with 🩵 for Ngọc Yến ("con bòaa Ýn") | 20/10/2026</p>
+    </footer>
+
+    <script>
+        /* ===================================================
+           1. CẤU HÌNH HÌNH ẢNH CỦA NGỌC YẾN (DỄ DÀNG THAY ĐỔI)
+           =================================================== */
+        const CONFIG_IMAGES = [
+            {
+                url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+                caption: "Nụ cười 'zuiii' thương hiệu của con bòaa Ýn 🐮✨"
+            },
+            {
+                url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80",
+                caption: "Lúc dịu dàng thanh lịch chuẩn tone Glacier Băng Thanh 🩵"
+            },
+            {
+                url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80",
+                caption: "Biểu cảm lầy lội không lẫn vào đâu được 😂"
+            },
+            {
+                url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80",
+                caption: "20/10 làm công chúa xinh đẹp nhất trần đời 👑"
+            }
+        ];
+
+        /* ===================================================
+           2. RENDER GALLERY AUTOMATICALLY
+           =================================================== */
+        function renderGallery() {
+            const container = document.getElementById('galleryGrid');
+            container.innerHTML = '';
+
+            CONFIG_IMAGES.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'polaroid-card';
+                card.onclick = () => openLightbox(item.url, item.caption);
+
+                card.innerHTML = `
+                    <div class="tape-sticker"></div>
+                    <div class="polaroid-img-wrapper">
+                        <img src="${item.url}" alt="Ngọc Yến" class="polaroid-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'">
+                    </div>
+                    <div class="polaroid-caption">${item.caption}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* ===================================================
+           3. FLOATING BG ANIMATION
+           =================================================== */
+        function initFloatingBg() {
+            const container = document.getElementById('floatingBg');
+            const icons = ['🐮', '🩵', '✨', '🐾', '🎀', '🌸'];
+            const count = 15;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-item';
+                el.innerText = icons[Math.floor(Math.random() * icons.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.animationDuration = (8 + Math.random() * 10) + 's';
+                el.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(el);
+            }
+        }
+
+        /* ===================================================
+           4. LIGHTBOX HANDLER
+           =================================================== */
+        function openLightbox(url, caption) {
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightboxCaption').innerText = caption;
+            document.getElementById('lightboxOverlay').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxOverlay').classList.remove('active');
+        }
+
+        /* ===================================================
+           5. GIFT OPEN & CONFETTI
+           =================================================== */
+        function openGift() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            triggerConfetti();
+            startMelody();
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#5c93b3', '#d6e8f2', '#ffffff', '#ffd1dc']
+                });
+            }
+        }
+
+        function showSurpriseModal() {
+            document.getElementById('surpriseModal').classList.add('active');
+            triggerConfetti();
+        }
+
+        function closeSurpriseModal() {
+            document.getElementById('surpriseModal').classList.remove('active');
+        }
+
+        /* ===================================================
+           6. AUDIO SYNTHESIZER (NO EXTERNAL MP3 NEEDED)
+           =================================================== */
+        let audioCtx = null;
+        let isPlaying = false;
+        let melodyTimer = null;
+
+        const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25]; // C D E F G A B C
+
+        function playNote(freq) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.2);
+            } catch (e) {}
+        }
+
+        function startMelody() {
+            if (isPlaying) return;
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isPlaying = true;
+            document.getElementById('audioToggle').innerText = '🔊';
+
+            let step = 0;
+            const melodySequence = [0, 2, 4, 2, 0, 4, 5, 4, 2, 0];
+            melodyTimer = setInterval(() => {
+                playNote(notes[melodySequence[step % melodySequence.length]]);
+                step++;
+            }, 600);
+        }
+
+        function stopMelody() {
+            isPlaying = false;
+            clearInterval(melodyTimer);
+            document.getElementById('audioToggle').innerText = '🔇';
+        }
+
+        document.getElementById('audioToggle').addEventListener('click', () => {
+            if (isPlaying) {
+                stopMelody();
+            } else {
+                startMelody();
+            }
+        });
+
+        /* ===================================================
+           7. INITIALIZATION
+           =================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            renderGallery();
+            initFloatingBg();
+        });
+    </script>
+</body>
+</html>
