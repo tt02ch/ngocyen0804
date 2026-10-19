@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Con Bòaa Ýn🩵</title>
+    <title>Ngọc Ýnnn</title>
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧋</text></svg>">
     
@@ -400,6 +400,16 @@
             font-size: 0.88rem;
         }
 
+        /* Youtube Iframe Hỗ Trợ Autoplay */
+        #ytAudioContainer {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
         @media (max-width: 600px) {
             .main-title { font-size: 1.7rem; }
             .orbit-container { height: 350px; }
@@ -412,8 +422,13 @@
 </head>
 <body>
 
-    <!-- Trình phát nhạc Youtube ẩn -->
-    <div id="ytAudioPlayer" style="display: none;"></div>
+    <!-- Container Youtube Iframe Ẩn Tích Hợp Autoplay -->
+    <div id="ytAudioContainer">
+        <iframe id="ytAudioPlayer" 
+                src="https://www.youtube.com/embed/1g20T3yD-kM?enablejsapi=1&autoplay=1&loop=1&playlist=1g20T3yD-kM" 
+                allow="autoplay">
+        </iframe>
+    </div>
 
     <!-- Canvas Vũ Trụ Galaxy & Trân Châu Hoàng Kim Floating -->
     <canvas id="effectsCanvas"></canvas>
@@ -439,12 +454,12 @@
     <main>
         <span class="badge-cow">🐮🩵 SPECIAL FOR NGỌC YẾN (ZUIII)</span>
         <h1 class="main-title">HAPPY 20/10 CON BÒAA ÝN! 🧋✨</h1>
-        <p class="sub-title">Chúc ýn 20/10 zui zẻ khum quạo, xing đẹp, luôn zuiii tươi và tràn ngập sự zô triii</p>
+        <p class="sub-title">Chúc ýn 20/10 zui zẻ khum quạo, xing đẹp, luôn zuiii tươi hạnh phúcc</p>
 
         <!-- 2. VÒNG XOAY 3D GALAXY ORBIT CAROUSEL -->
         <div style="margin-top: 20px;">
             <p style="font-size: 0.95rem; color: var(--glacier-cyan); font-weight: 700;">
-                úm bòaaa
+                :)))))))))))
             </p>
             <div class="orbit-container">
                 <div class="orbit-stage" id="orbitStage">
@@ -466,7 +481,7 @@
             </div>
             <p class="voucher-detail">
                 <strong>Áp dụng cho:</strong> 01 Ly KOI Thé Trân Châu Hoàng Kim / Macchiato Size L 👑<br>
-                <strong>Hạn sử dụng:</strong> Mai đặt liền tay - Bao trọn 100% người trả tiền là me! 😎<br>
+                <strong>Hạn sử dụng:</strong> Mai đặt liền tay - sópp baoo ạ 😎<br>
                 <span style="font-size: 0.9rem; color: var(--glacier-cyan);">Chúc bòaa Ýn luôn ngọt ngào như Macchiato & năng lượng bùng nổ như trân châu!</span>
             </p>
             <button class="btn-koi" onclick="redeemVoucher()">
@@ -512,7 +527,6 @@
     <script>
         /* ===================================================
            1. CẤU HÌNH DỄ DÀNG THAY ẢNH CỦA NGỌC YẾN
-           (Các file ảnh nằm cùng cấp với file index.html)
            =================================================== */
         const CONFIG_IMAGES = [
             { url: "1.png" },
@@ -523,15 +537,12 @@
         ];
 
         /* ===================================================
-           2. CẤU HÌNH NHẠC YOUTUBE HOT TREND (LAVIEM / TỰ THAY LINK)
+           2. XỬ LÝ ÂM THANH YOUTUBE LẬP TRÌNH (YOUTUBE API)
            =================================================== */
-        // ID Video Youtube bài nhạc Laviem / Hot Trend
-        const YOUTUBE_VIDEO_ID = "1g20T3yD-kM"; // <- Thay đổi ID video Youtube tại đây nếu muốn
-
         let ytPlayer = null;
         let isAudioPlaying = false;
 
-        // Tải API iframe của Youtube
+        // Tải API Youtube
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -539,27 +550,17 @@
 
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('ytAudioPlayer', {
-                height: '0',
-                width: '0',
-                videoId: YOUTUBE_VIDEO_ID,
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': YOUTUBE_VIDEO_ID
-                },
                 events: {
-                    'onReady': onPlayerReady
+                    'onReady': (event) => {
+                        event.target.setVolume(100);
+                    }
                 }
             });
         }
 
-        function onPlayerReady(event) {
-            event.target.setVolume(100);
-        }
-
         function startAudio() {
             if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                ytPlayer.unMute();
                 ytPlayer.playVideo();
                 isAudioPlaying = true;
                 document.getElementById('audioBtn').innerText = '🔊';
