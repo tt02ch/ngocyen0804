@@ -3,19 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galaxy 20/10 - Bòaa Ýn 🌌🐮🎏</title>
+    <title>KOI Thé 20/10 - Con Bòaa Ýn Zuiii 🐮🧋🩵</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧋</text></svg>">
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Mali:wght@600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
+        /* ==========================================================================
+           1. CORE DESIGN SYSTEM & GLACIER x GALAXY x KOI THEME
+           ========================================================================== */
         :root {
-            --space-bg: #0b0e14;
+            --space-black: #080c14;
             --glacier-cyan: #70d6ff;
             --glacier-blue: #5c93b3;
-            --koi-orange: #ff70a6;
-            --text-glow: rgba(112, 214, 255, 0.8);
+            --glacier-glow: rgba(112, 214, 255, 0.4);
+            --koi-gold: #ffb703;
+            --koi-gold-glow: rgba(255, 183, 3, 0.6);
+            --koi-cream: #fff3d6;
+            --text-light: #f0f8ff;
+            --font-title: 'Mali', cursive;
+            --font-body: 'Quicksand', sans-serif;
         }
 
         * {
@@ -23,18 +37,20 @@
             margin: 0;
             padding: 0;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
-            font-family: 'Comfortaa', cursive, sans-serif;
-            background-color: var(--space-bg);
-            color: #ffffff;
+            font-family: var(--font-body);
+            background-color: var(--space-black);
+            color: var(--text-light);
             overflow-x: hidden;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
-        /* Canvas Vũ Trụ Sao Bay */
-        #spaceCanvas {
+        /* Canvas Hiệu Ứng Vũ Trụ & Trân Châu Floating */
+        #effectsCanvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -44,192 +60,292 @@
             pointer-events: none;
         }
 
-        /* Overlay Mở Quà */
+        /* Nút Bật/Tắt Âm Thanh */
+        .audio-btn {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 1000;
+            background: rgba(12, 20, 32, 0.85);
+            border: 2px solid var(--glacier-cyan);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            color: var(--koi-gold);
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--glacier-glow);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 25px var(--koi-gold-glow);
+        }
+
+        /* Overlay Màn Hình Chào Mừng (Gift Box Intro) */
         #intro-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: radial-gradient(circle, #1a233a 0%, #080b11 100%);
+            background: radial-gradient(circle at center, #152238 0%, #080c14 100%);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
-            transition: all 0.8s ease;
+            padding: 24px;
+            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
         #intro-screen.hidden {
             opacity: 0;
             pointer-events: none;
-            transform: scale(1.2);
+            transform: scale(1.15);
         }
 
-        .galaxy-portal {
-            width: 120px;
-            height: 120px;
+        .boba-portal {
+            position: relative;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            background: radial-gradient(circle, #70d6ff, #5c93b3);
-            box-shadow: 0 0 30px #70d6ff, 0 0 60px #5c93b3;
+            background: radial-gradient(circle, var(--koi-gold), var(--glacier-blue));
+            box-shadow: 0 0 35px var(--koi-gold-glow), 0 0 60px var(--glacier-glow);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
+            font-size: 4rem;
             cursor: pointer;
             animation: portalPulse 2s infinite ease-in-out;
             margin-bottom: 25px;
         }
 
         @keyframes portalPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); box-shadow: 0 0 30px #70d6ff; }
-            50% { transform: scale(1.1) rotate(180deg); box-shadow: 0 0 50px #ff70a6; }
+            0%, 100% { transform: scale(1) rotate(0deg); box-shadow: 0 0 30px var(--koi-gold-glow); }
+            50% { transform: scale(1.1) rotate(10deg); box-shadow: 0 0 50px var(--glacier-glow); }
         }
 
-        .btn-galaxy {
+        .btn-koi {
+            background: linear-gradient(135deg, var(--koi-gold), #fb8500);
+            color: #080c14;
+            font-family: var(--font-title);
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 14px 36px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--koi-gold-glow);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-koi:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 30px var(--koi-gold);
+        }
+
+        .btn-glacier {
             background: linear-gradient(135deg, var(--glacier-cyan), var(--glacier-blue));
-            color: #0b0e14;
-            font-family: inherit;
+            color: #080c14;
+            font-family: var(--font-title);
             font-size: 1.1rem;
             font-weight: 700;
             padding: 14px 32px;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(112, 214, 255, 0.5);
+            box-shadow: 0 0 20px var(--glacier-glow);
             transition: all 0.3s ease;
         }
 
-        .btn-galaxy:hover {
+        .btn-glacier:hover {
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 0 30px rgba(112, 214, 255, 0.8);
+            box-shadow: 0 0 30px var(--glacier-cyan);
         }
 
-        /* Container Chính */
+        /* Container Nội Dung Chính */
         main {
             position: relative;
             z-index: 1;
             max-width: 900px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 30px 20px 60px 20px;
             text-align: center;
         }
 
-        h1 {
+        .main-title {
+            font-family: var(--font-title);
             font-size: 2.2rem;
             color: var(--glacier-cyan);
-            text-shadow: 0 0 15px var(--text-glow);
-            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--glacier-glow);
+            margin-bottom: 8px;
         }
 
-        .short-wish {
-            font-size: 1.1rem;
-            color: #d0e8f5;
-            margin-bottom: 40px;
+        .sub-title {
+            font-size: 1.05rem;
+            color: var(--koi-cream);
+            margin-bottom: 25px;
         }
 
-        /* VÒNG XOAY GALAXY 3D (3D CAROUSEL) */
-        .galaxy-3d-stage {
-            perspective: 1000px;
-            width: 100%;
-            height: 380px;
+        .badge-cow {
+            display: inline-block;
+            background: rgba(112, 214, 255, 0.15);
+            border: 1px solid var(--glacier-cyan);
+            color: var(--glacier-cyan);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* ==========================================================================
+           2. VÒNG XOAY 3D GALAXY ORBIT CAROUSEL (HIỆU ỨNG 3D XOAY THỰC)
+           ========================================================================== */
+        .orbit-container {
             position: relative;
-            margin: 30px 0 50px 0;
+            width: 100%;
+            height: 420px;
+            margin: 20px 0 40px 0;
+            perspective: 1000px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
-        .galaxy-carousel {
-            width: 180px;
-            height: 240px;
+        .orbit-stage {
             position: absolute;
+            width: 200px;
+            height: 260px;
             transform-style: preserve-3d;
-            animation: spinGalaxy 18s infinite linear;
+            transition: transform 0.1s linear;
         }
 
-        .galaxy-carousel:hover {
-            animation-play-state: paused;
-        }
-
-        @keyframes spinGalaxy {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
-
-        .galaxy-item {
+        .orbit-card {
             position: absolute;
-            width: 180px;
-            height: 240px;
-            border-radius: 16px;
-            overflow: hidden;
+            width: 190px;
+            height: 250px;
+            border-radius: 18px;
+            background: rgba(15, 23, 38, 0.9);
             border: 2px solid var(--glacier-cyan);
-            box-shadow: 0 0 20px rgba(112, 214, 255, 0.4);
-            background: #151c28;
+            box-shadow: 0 0 20px var(--glacier-glow);
+            overflow: hidden;
             cursor: pointer;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        .galaxy-item:hover {
-            border-color: var(--koi-orange);
-            box-shadow: 0 0 30px var(--koi-orange);
+        .orbit-card:hover {
+            border-color: var(--koi-gold);
+            box-shadow: 0 0 30px var(--koi-gold-glow);
         }
 
-        .galaxy-item img {
+        .orbit-card img {
             width: 100%;
             height: 80%;
             object-fit: cover;
         }
 
-        .galaxy-item .item-caption {
+        .orbit-card .card-cap {
             height: 20%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.85rem;
-            color: #ffffff;
-            background: rgba(11, 14, 20, 0.8);
+            font-weight: 700;
+            color: var(--text-light);
+            background: rgba(8, 12, 20, 0.95);
+            padding: 0 6px;
         }
 
-        /* KHU VỰC ĐẶT KOI CHO ÝN */
-        .koi-section {
-            background: rgba(21, 28, 40, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(112, 214, 255, 0.3);
-            border-radius: 20px;
-            padding: 30px 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        .orbit-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
         }
 
-        .koi-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #ff70a6, #ff9770);
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
+        .btn-ctrl {
+            background: rgba(20, 32, 50, 0.8);
+            border: 1px solid var(--glacier-cyan);
+            color: var(--glacier-cyan);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-ctrl:hover {
+            background: var(--glacier-cyan);
+            color: #080c14;
+            box-shadow: 0 0 15px var(--glacier-cyan);
+        }
+
+        /* ==========================================================================
+           3. VOUCHER TRÀ SỮA KOI THÉ INTERACTIVE
+           ========================================================================== */
+        .voucher-box {
+            background: linear-gradient(135deg, rgba(20, 32, 54, 0.95) 0%, rgba(10, 15, 25, 0.95) 100%);
+            border: 2px dashed var(--koi-gold);
+            border-radius: 24px;
+            padding: 28px 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 183, 3, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voucher-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             margin-bottom: 12px;
         }
 
-        /* LIGHTBOX & MODAL */
+        .voucher-title {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            color: var(--koi-gold);
+            text-shadow: 0 0 10px var(--koi-gold-glow);
+        }
+
+        .voucher-detail {
+            font-size: 1.05rem;
+            color: #d6e8f2;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* ==========================================================================
+           4. MODALS (KOI VIP CARD & LIGHTBOX)
+           ========================================================================== */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(8, 11, 17, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(4, 7, 12, 0.88);
+            backdrop-filter: blur(10px);
             z-index: 10000;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.35s ease;
             padding: 20px;
         }
 
@@ -239,218 +355,331 @@
         }
 
         .modal-card {
-            background: #151c28;
-            border: 2px solid var(--glacier-cyan);
-            border-radius: 20px;
-            max-width: 450px;
+            background: linear-gradient(135deg, #121c2d 0%, #080d17 100%);
+            border: 2px solid var(--koi-gold);
+            border-radius: 24px;
+            max-width: 480px;
             width: 100%;
-            padding: 30px;
-            box-shadow: 0 0 40px rgba(112, 214, 255, 0.3);
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 0 50px var(--koi-gold-glow);
+            transform: scale(0.85);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
         }
 
         .modal-close {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: none;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #fff;
-            font-size: 1.4rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
             cursor: pointer;
         }
 
-        /* Audio Toggle */
-        .audio-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(21, 28, 40, 0.8);
-            border: 1px solid var(--glacier-cyan);
-            color: #fff;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
+        .koi-vip-card {
+            background: linear-gradient(135deg, var(--koi-gold) 0%, #d4a373 100%);
+            color: #080c14;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            font-weight: 700;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 70vh;
+            border-radius: 16px;
+            border: 2px solid var(--glacier-cyan);
+            box-shadow: 0 0 30px var(--glacier-glow);
+            object-fit: contain;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #5c788a;
+            font-size: 0.88rem;
+        }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.7rem; }
+            .orbit-container { height: 350px; }
+            .orbit-stage { width: 160px; height: 210px; }
+            .orbit-card { width: 150px; height: 200px; }
+            .voucher-title { font-size: 1.25rem; }
+            .btn-koi { padding: 12px 28px; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas Vũ Trụ -->
-    <canvas id="spaceCanvas"></canvas>
+    <!-- Canvas Vũ Trụ Galaxy & Trân Châu Hoàng Kim Floating -->
+    <canvas id="effectsCanvas"></canvas>
 
-    <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">🎵</button>
+    <!-- Nút Âm Thanh Background -->
+    <button class="audio-btn" id="audioBtn" title="Bật/Tắt Nhạc Nền">🎵</button>
 
-    <!-- 1. CỔNG VŨ TRỤ GALAXY -->
+    <!-- 1. INTRO SCREEN -->
     <div id="intro-screen">
-        <div class="galaxy-portal" onclick="enterGalaxy()">🌌</div>
-        <h2 style="color: var(--glacier-cyan); margin-bottom: 10px;">GALAXY 20/10 FOR BÒAA ÝN</h2>
-        <p style="color: #a0c4df; margin-bottom: 25px;">Chạm vào cổng vũ trụ để khám phá không gian riêng của Ýn 🐮✨</p>
-        <button class="btn-galaxy" onclick="enterGalaxy()">Khám phá ngay ✨</button>
+        <div class="boba-portal" onclick="openGift()">🧋</div>
+        <h1 style="font-family: var(--font-title); font-size: 2rem; color: var(--glacier-cyan); margin-bottom: 10px;">
+            HÉ LÔ CON BÒAA ÝN 🐮🩵
+        </h1>
+        <p style="color: var(--koi-cream); margin-bottom: 25px; font-size: 1.05rem;">
+            Một món quà đậm vị KOI Thé Trân Châu Hoàng Kim đang chờ bà nè! ✨
+        </p>
+        <button class="btn-koi" onclick="openGift()">
+            Mở quà & Lấy Trà Sữa Đi Bòaa 🎁
+        </button>
     </div>
 
     <!-- MAIN CONTENT -->
     <main>
-        <h1>HAPPY 20/10 GALAXY 🐮🌌</h1>
-        <p class="short-wish">Chúc con bòaa Ýn ("zuiii") 20/10 luôn rạng rỡ như ngàn vì sao, gặp toàn chuyện may mắn & lúc nào cũng tràn ngập niềm vui!</p>
+        <span class="badge-cow">🐮🩵 SPECIAL FOR NGỌC YẾN (ZUIII)</span>
+        <h1 class="main-title">HAPPY 20/10 CON BÒAA ÝN! 🧋✨</h1>
+        <p class="sub-title">Chúc bà 20/10 rạng rỡ, xinh đẹp, luôn zuiii tươi và tràn ngập năng lượng tích cực!</p>
 
-        <!-- 2. VÒNG XOAY GALAXY 3D CAROUSEL -->
-        <p style="font-size: 0.9rem; color: var(--glacier-cyan); margin-bottom: -10px;">🪐 Vòng xoay vũ trụ ảnh (Rê chuột/Chạm để dừng)</p>
-        <div class="galaxy-3d-stage">
-            <div class="galaxy-carousel" id="carousel3D">
-                <!-- Javascript sẽ tự chia góc 3D xoay vòng -->
+        <!-- 2. VÒNG XOAY 3D GALAXY ORBIT CAROUSEL -->
+        <div style="margin-top: 20px;">
+            <p style="font-size: 0.95rem; color: var(--glacier-cyan); font-weight: 700;">
+                🌌 Vũ Trụ Ảnh 3D Con Bòaa Ýn (Bấm ảnh để phóng to)
+            </p>
+            <div class="orbit-container">
+                <div class="orbit-stage" id="orbitStage">
+                    <!-- Cards generated dynamically via JavaScript -->
+                </div>
+            </div>
+            <div class="orbit-controls">
+                <button class="btn-ctrl" onclick="rotateManual(-1)">❮</button>
+                <button class="btn-ctrl" onclick="toggleAutoRotate()" id="pauseBtn">⏸</button>
+                <button class="btn-ctrl" onclick="rotateManual(1)">❯</button>
             </div>
         </div>
 
-        <!-- 3. KHU VỰC ĐẶT KOI BÒAA ÝN -->
-        <div class="koi-section">
-            <span class="koi-badge">🎏 Dự Án Mai Đặt Koi</span>
-            <h3 style="color: var(--glacier-cyan); margin-bottom: 10px;">Bò Koi May Mắn Dành Riêng Cho Ýn 🐮🐟</h3>
-            <p style="color: #c0dceb; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
-                Mai tính đặt em Koi xịn xò cho Ýn nè! Tặng trước chú Koi điện tử lấy vía may mắn, hút lộc tài và lúc nào cũng bơi "zuiii" phơ phới nha!
+        <!-- 3. INTERACTIVE KOI THÉ VOUCHER -->
+        <div class="voucher-box">
+            <div class="voucher-header">
+                <span style="font-size: 2rem;">🧋</span>
+                <h2 class="voucher-title">VOUCHER KOI THÉ 20/10 ĐẶC QUYỀN</h2>
+            </div>
+            <p class="voucher-detail">
+                <strong>Áp dụng cho:</strong> 01 Ly KOI Thé Trân Châu Hoàng Kim / Macchiato Size L 👑<br>
+                <strong>Hạn sử dụng:</strong> Mai đặt liền tay - Bao trọn 100% người trả tiền là tui! 😎<br>
+                <span style="font-size: 0.9rem; color: var(--glacier-cyan);">Chúc bòaa Ýn luôn ngọt ngào như Macchiato & năng lượng bùng nổ như trân châu!</span>
             </p>
-            <button class="btn-galaxy" onclick="openSurpriseModal()">Nhận thiệp bí mật 💌</button>
+            <button class="btn-koi" onclick="redeemVoucher()">
+                ĐỔI VOUCHER KOI THÉ NGAY 🧋✨
+            </button>
         </div>
     </main>
 
-    <!-- MODAL THIỆP BÍ MẬT -->
-    <div class="modal-overlay" id="surpriseModal">
+    <!-- MODAL KOI VIP CARD -->
+    <div class="modal-overlay" id="vipModal">
         <div class="modal-card">
-            <button class="modal-close" onclick="closeSurpriseModal()">✕</button>
-            <div style="font-size: 3rem; margin-bottom: 10px;">🐮🎏✨</div>
-            <h3 style="color: var(--glacier-cyan); margin-bottom: 15px;">Thư Từ Vũ Trụ</h3>
-            <p style="color: #d0e8f5; line-height: 1.7; font-size: 0.95rem; margin-bottom: 20px;">
-                Chúc Ngọc Yến ngày 20/10 xinh đẹp, vui vẻ, công việc hay học hành đều thuận lợi vượt bậc. Mong rằng chú Koi mới sẽ mang lại thật nhiều may mắn cho bà nhé! 🩵
+            <button class="modal-close" onclick="closeVipModal()">✕</button>
+            <div style="font-size: 3.5rem; margin-bottom: 10px;">💳🐮🧋</div>
+            <h3 style="font-family: var(--font-title); color: var(--koi-gold); font-size: 1.6rem; margin-bottom: 5px;">
+                THẺ KOI THÉ VIP CARD
+            </h3>
+            <p style="color: var(--glacier-cyan); font-size: 0.9rem;">Cấp riêng ngày 20/10/2026</p>
+            
+            <div class="koi-vip-card">
+                <p style="font-size: 0.8rem; text-transform: uppercase; opacity: 0.8;">Khách Hàng VIP Tối Cao</p>
+                <p style="font-size: 1.3rem; margin: 5px 0;">CON BÒAA ÝN ZUIII 🐮🩵</p>
+                <p style="font-size: 0.85rem; margin-top: 10px;">Quyền lợi: Mai nhắn liền món trà sữa KOI yêu thích để tui ship tận nơi nha!</p>
+            </div>
+
+            <p style="color: #d6e8f2; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                Cảm ơn bà vì đã luôn là người bạn lầy lội, đáng yêu và mang lại tiếng cười cho mọi người! 20/10 thật vui vẻ nha! 🎉
             </p>
-            <button class="btn-galaxy" onclick="closeSurpriseModal()">Xinh đẹp luôn! 💕</button>
+            <button class="btn-glacier" onclick="closeVipModal()">Đã Nhận & Chuẩn Bị Uống Trà Sữa! 💕</button>
         </div>
     </div>
 
     <!-- LIGHTBOX MODAL -->
     <div class="modal-overlay" id="lightboxModal" onclick="closeLightbox()">
-        <div class="modal-card" style="max-width: 600px; text-align: center;">
-            <img src="" id="lightboxImg" style="width: 100%; max-height: 60vh; object-fit: contain; border-radius: 12px; margin-bottom: 15px;">
-            <p id="lightboxCaption" style="color: var(--glacier-cyan); font-size: 1rem;"></p>
+        <div style="text-align: center; max-width: 600px;">
+            <img src="" id="lightboxImg" class="lightbox-img">
+            <p id="lightboxCap" style="color: var(--koi-gold); font-family: var(--font-title); font-size: 1.1rem; margin-top: 15px;"></p>
         </div>
     </div>
 
+    <footer>
+        <p>Crafted with 🩵 & 🧋 for Ngọc Yến ("con bòaa Ýn") | KOI Thé 20/10 Edition</p>
+    </footer>
+
     <script>
         /* ===================================================
-           1. ANH VÒNG XOAY GALAXY 3D (THAY LINK ẢNH TẠI ĐÂY)
+           1. CẤU HÌNH DỄ DÀNG THAY ẢNH CỦA NGỌC YẾN
            =================================================== */
-        const GALAXY_IMAGES = [
+        const CONFIG_IMAGES = [
             {
                 url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
-                caption: "Nụ cười 'zuiii' rạng rỡ 🐮✨"
+                caption: "Nụ cười 'zuiii' thương hiệu con bòaa Ýn 🐮✨"
             },
             {
                 url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80",
-                caption: "Xinh đẹp chuẩn tone Băng Thanh 🩵"
+                caption: "Tone Glacier Băng Thanh chảnh sảng 🩵"
             },
             {
                 url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80",
-                caption: "Lầy lội siêu đáng yêu 😂"
+                caption: "Đang chờ ly KOI Thé Trân Châu Hoàng Kim 🧋"
             },
             {
                 url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80",
-                caption: "20/10 Rạng rỡ ngàn sao 🌟"
+                caption: "20/10 Công chúa rạng rỡ ngàn sao 🌟"
             },
             {
                 url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
-                caption: "Bòaa Ýn khoảnh khắc lung linh 🎏"
+                caption: "Bòaa Ýn góc nào cũng siêu zuiii 😂"
             }
         ];
 
-        /* Build Vòng Xoay 3D */
-        function build3DCarousel() {
-            const carousel = document.getElementById('carousel3D');
-            const total = GALAXY_IMAGES.length;
-            const angleStep = 360 / total;
-            const radius = 220; // Bán kính vòng xoay
+        /* ===================================================
+           2. CANVAS EFFECTS: STARS & FLOATING BOBA / KOI CUPS
+           =================================================== */
+        const canvas = document.getElementById('effectsCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-            GALAXY_IMAGES.forEach((item, index) => {
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+
+            // Tạo các ngôi sao Galaxy & Hạt Trân Châu Hoàng Kim floating
+            for (let i = 0; i < 90; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 3 + 1,
+                    color: Math.random() > 0.4 ? '#ffb703' : '#70d6ff', // Vàng KOI hoặc Xanh Glacier
+                    speedY: Math.random() * 0.6 + 0.2,
+                    speedX: Math.sin(Math.random()) * 0.3,
+                    isBoba: Math.random() > 0.6
+                });
+            }
+        }
+
+        function renderCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = p.isBoba ? 10 : 4;
+                ctx.shadowColor = p.color;
+                ctx.fill();
+
+                p.y -= p.speedY;
+                p.x += p.speedX;
+
+                if (p.y < -10) {
+                    p.y = canvas.height + 10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(renderCanvas);
+        }
+
+        /* ===================================================
+           3. 3D ORBIT CAROUSEL LOGIC
+           =================================================== */
+        let currentAngle = 0;
+        let isAutoRotating = true;
+        let autoRotateTimer = null;
+
+        function build3DOrbit() {
+            const stage = document.getElementById('orbitStage');
+            stage.innerHTML = '';
+            const total = CONFIG_IMAGES.length;
+            const angleStep = 360 / total;
+            const radius = window.innerWidth < 600 ? 160 : 230; // Dynamic Radius for Mobile/PC
+
+            CONFIG_IMAGES.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = 'galaxy-item';
-                const currentAngle = angleStep * index;
-                card.style.transform = `rotateY(${currentAngle}deg) translateZ(${radius}px)`;
-                
+                card.className = 'orbit-card';
+                const angle = angleStep * index;
+                card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
                 card.onclick = () => openLightbox(item.url, item.caption);
 
                 card.innerHTML = `
-                    <img src="${item.url}" alt="Ýn">
-                    <div class="item-caption">${item.caption}</div>
+                    <img src="${item.url}" alt="Ýn" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'">
+                    <div class="card-cap">${item.caption}</div>
                 `;
-                carousel.appendChild(card);
+                stage.appendChild(card);
             });
+            updateOrbitTransform();
+        }
+
+        function updateOrbitTransform() {
+            const stage = document.getElementById('orbitStage');
+            stage.style.transform = `rotateY(${currentAngle}deg)`;
+        }
+
+        function rotateManual(direction) {
+            currentAngle += direction * 72; // Move 1 step
+            updateOrbitTransform();
+        }
+
+        function startAutoRotate() {
+            if (autoRotateTimer) clearInterval(autoRotateTimer);
+            autoRotateTimer = setInterval(() => {
+                if (isAutoRotating) {
+                    currentAngle -= 0.6; // Smooth continuous rotation
+                    updateOrbitTransform();
+                }
+            }, 30);
+        }
+
+        function toggleAutoRotate() {
+            isAutoRotating = !isAutoRotating;
+            document.getElementById('pauseBtn').innerText = isAutoRotating ? '⏸' : '▶';
         }
 
         /* ===================================================
-           2. CANVAS SPARKLE STARS BACKGROUND
+           4. INTERACTION HANDLERS & CONFETTI
            =================================================== */
-        const canvas = document.getElementById('spaceCanvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-
-        function initStars() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < 120; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    color: Math.random() > 0.5 ? '#70d6ff' : '#ff70a6',
-                    speed: Math.random() * 0.5 + 0.1
-                });
-            }
-        }
-
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(star => {
-                ctx.fillStyle = star.color;
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                star.y -= star.speed;
-                if (star.y < 0) star.y = canvas.height;
-            });
-            requestAnimationFrame(drawStars);
-        }
-
-        /* ===================================================
-           3. HANDLERS & CONFETTI
-           =================================================== */
-        function enterGalaxy() {
+        function openGift() {
             document.getElementById('intro-screen').classList.add('hidden');
+            triggerConfetti();
+            startMelody();
+        }
+
+        function triggerConfetti() {
             if (typeof confetti === 'function') {
                 confetti({
-                    particleCount: 100,
+                    particleCount: 90,
                     spread: 80,
                     origin: { y: 0.6 },
-                    colors: ['#70d6ff', '#ff70a6', '#ffffff']
+                    colors: ['#ffb703', '#70d6ff', '#ffffff', '#fb8500']
                 });
             }
         }
 
-        function openSurpriseModal() {
-            document.getElementById('surpriseModal').classList.add('active');
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 50, spread: 60 });
-            }
+        function redeemVoucher() {
+            document.getElementById('vipModal').classList.add('active');
+            triggerConfetti();
         }
 
-        function closeSurpriseModal() {
-            document.getElementById('surpriseModal').classList.remove('active');
+        function closeVipModal() {
+            document.getElementById('vipModal').classList.remove('active');
         }
 
-        function openLightbox(url, caption) {
+        function openLightbox(url, cap) {
             document.getElementById('lightboxImg').src = url;
-            document.getElementById('lightboxCaption').innerText = caption;
+            document.getElementById('lightboxCap').innerText = cap;
             document.getElementById('lightboxModal').classList.add('active');
         }
 
@@ -458,11 +687,73 @@
             document.getElementById('lightboxModal').classList.remove('active');
         }
 
-        window.addEventListener('resize', initStars);
+        /* ===================================================
+           5. AUDIO SYNTHESIZER (NO EXTERNAL MP3 NEEDED)
+           =================================================== */
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let melodyLoop = null;
+
+        const melodyNotes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00];
+
+        function playSynthNote(freq) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.0);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.0);
+            } catch (e) {}
+        }
+
+        function startMelody() {
+            if (isAudioPlaying) return;
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isAudioPlaying = true;
+            document.getElementById('audioBtn').innerText = '🔊';
+
+            let idx = 0;
+            melodyLoop = setInterval(() => {
+                playSynthNote(melodyNotes[idx % melodyNotes.length]);
+                idx++;
+            }, 550);
+        }
+
+        function stopMelody() {
+            isAudioPlaying = false;
+            clearInterval(melodyLoop);
+            document.getElementById('audioBtn').innerText = '🔇';
+        }
+
+        document.getElementById('audioBtn').addEventListener('click', () => {
+            if (isAudioPlaying) stopMelody();
+            else startMelody();
+        });
+
+        /* ===================================================
+           6. INITIALIZATION
+           =================================================== */
+        window.addEventListener('resize', () => {
+            initCanvas();
+            build3DOrbit();
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
-            initStars();
-            drawStars();
-            build3DCarousel();
+            initCanvas();
+            renderCanvas();
+            build3DOrbit();
+            startAutoRotate();
         });
     </script>
 </body>
