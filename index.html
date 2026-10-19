@@ -60,33 +60,6 @@
             pointer-events: none;
         }
 
-        /* Nút Bật/Tắt Âm Thanh */
-        .audio-btn {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            z-index: 1000;
-            background: rgba(12, 20, 32, 0.85);
-            border: 2px solid var(--glacier-cyan);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            color: var(--koi-gold);
-            font-size: 1.3rem;
-            cursor: pointer;
-            box-shadow: 0 0 15px var(--glacier-glow);
-            backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .audio-btn:hover {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 0 25px var(--koi-gold-glow);
-        }
-
         /* Overlay Màn Hình Chào Mừng (Gift Box Intro) */
         #intro-screen {
             position: fixed;
@@ -255,31 +228,6 @@
             object-fit: cover;
         }
 
-        .orbit-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .btn-ctrl {
-            background: rgba(20, 32, 50, 0.8);
-            border: 1px solid var(--glacier-cyan);
-            color: var(--glacier-cyan);
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-ctrl:hover {
-            background: var(--glacier-cyan);
-            color: #080c14;
-            box-shadow: 0 0 15px var(--glacier-cyan);
-        }
-
         /* ==========================================================================
            3. VOUCHER TRÀ SỮA KOI THÉ INTERACTIVE
            ========================================================================== */
@@ -415,14 +363,10 @@
     <!-- Thẻ Audio Ẩn Để Phát File Nhạc Tải Lên -->
     <audio id="bgMusic" loop preload="auto">
         <source src="yn.mp4" type="audio/mpeg">
-        <!-- Có thể hỗ trợ thêm định dạng khác như .ogg / .wav nếu cần -->
     </audio>
 
     <!-- Canvas Vũ Trụ Galaxy & Trân Châu Hoàng Kim Floating -->
     <canvas id="effectsCanvas"></canvas>
-
-    <!-- Nút Bật/Tắt Âm Thanh -->
-    <!-- <button class="audio-btn" id="audioBtn" title="Bật/Tắt Nhạc Nền">🎵</button> -->
 
     <!-- 1. INTRO SCREEN -->
     <div id="intro-screen">
@@ -523,33 +467,13 @@
            2. LOGIC PHÁT FILE ÂM THANH TẢI LÊN (AUDIO FILE)
            =================================================== */
         const bgAudio = document.getElementById('bgMusic');
-        let isAudioPlaying = false;
 
         function startAudio() {
             if (!bgAudio) return;
-            
-            bgAudio.play().then(() => {
-                isAudioPlaying = true;
-                document.getElementById('audioBtn').innerText = '🔊';
-            }).catch(err => {
+            bgAudio.play().catch(err => {
                 console.log("Autoplay blocked or file not found:", err);
             });
         }
-
-        function stopAudio() {
-            if (!bgAudio) return;
-            bgAudio.pause();
-            isAudioPlaying = false;
-            document.getElementById('audioBtn').innerText = '🔇';
-        }
-
-        document.getElementById('audioBtn').addEventListener('click', () => {
-            if (isAudioPlaying) {
-                stopAudio();
-            } else {
-                startAudio();
-            }
-        });
 
         /* ===================================================
            3. CANVAS EFFECTS: STARS & FLOATING BOBA
@@ -648,7 +572,7 @@
         function openGift() {
             document.getElementById('intro-screen').classList.add('hidden');
             triggerConfetti();
-            startAudio(); // Phát file nhạc tải lên khi mở thư
+            startAudio(); // Tự động phát âm thanh khi nhấn nút mở quà
         }
 
         function triggerConfetti() {
